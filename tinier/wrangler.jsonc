@@ -6,7 +6,7 @@
   "compatibility_date": "2026-10-08",
   // Only on its own domain: no workers.dev copy once this is live.
   "workers_dev": false,
-  "routes": [{ "pattern": "tinier.tinylittleoffice.com", "custom_domain": true }],
+  "routes": [{ "pattern": "tinier.monkeydo.biz", "custom_domain": true }],
   "d1_databases": [
     {
       "binding": "DB",
@@ -20,6 +20,8 @@
   // A hundred links a day from one address, counted in D1 under a keyed hash (tinier.ts); the key is the secret
   // BRAKE_KEY (`wrangler secret put BRAKE_KEY`), never here. Expired links, and the counts of days before
   // yesterday, go every hour; a read of an expired link removes it sooner.
+  // The site the shortener serves and lets call it (tinier/tinier.ts SITE); this fork's.
+  "vars": { "SITE": "https://office.monkeydo.biz" },
   "triggers": { "crons": ["17 * * * *"] },
   // No logs: the server learns that a link was made, and keeps even that to itself.
   "observability": { "enabled": false },

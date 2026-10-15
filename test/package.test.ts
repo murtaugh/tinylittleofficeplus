@@ -13,7 +13,7 @@ const pkg = JSON.parse(readFileSync(join(PKG, 'package.json'), 'utf8'));
 
 test('the package is the site’s version, public, named tinylittleoffice, with both commands and no dependencies', () => {
   expect(pkg.name).toBe('tinylittleoffice');
-  expect(pkg.private).toBeUndefined();
+  expect(pkg.private).toBe(true); // This fork publishes no package (src/plus/README.md, "Deploying").
   expect(pkg.version).toBe(JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).version);
   expect(pkg.bin).toStrictEqual({ tinylittleoffice: 'dist/tinyoffice.js', tinyoffice: 'dist/tinyoffice.js' });
   expect(pkg.dependencies).toBeUndefined();

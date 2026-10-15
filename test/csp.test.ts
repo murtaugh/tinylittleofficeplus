@@ -53,7 +53,7 @@ test('every directive that reaches the web is the site and the registry’s host
     'https://tiles.openfreemap.org',
     'https://tile.openstreetmap.org',
     'https://nominatim.openstreetmap.org',
-    'https://tinier.tinylittleoffice.com',
+    'https://tinier.monkeydo.biz',
   ]);
 });
 

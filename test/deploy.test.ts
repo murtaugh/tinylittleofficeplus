@@ -52,7 +52,7 @@ test('a tag v* deploys: the checks and both Workers by npm run deploy with the t
   expect(deploy.permissions).toEqual({ contents: 'read', 'id-token': 'write' });
   const runs = deploy.steps.map((s) => s.run ?? '');
   const at = (cmd: string) => runs.findIndex((r) => r.split('\n').some((l) => l.trim().startsWith(cmd)));
-  for (const cmd of ['npm ci', 'npx playwright install --with-deps chromium webkit', 'bash scripts/fonts-box.sh', 'npm run deploy', 'npm run verify-deploy -- https://tinylittleoffice.com/'])
+  for (const cmd of ['npm ci', 'npx playwright install --with-deps chromium webkit', 'bash scripts/fonts-box.sh', 'npm run deploy', 'npm run verify-deploy -- https://office.monkeydo.biz/'])
     expect(at(cmd), cmd).toBeGreaterThanOrEqual(0);
   expect(at('npm ci')).toBeLessThan(at('npm run deploy'));
   expect(at('npm run deploy')).toBeLessThan(at('npm run verify-deploy'));

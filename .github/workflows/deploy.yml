@@ -33,10 +33,45 @@ concurrency:
 env:
   TAG: ${{ inputs.tag || github.ref_name }}
   # The address the site is published at (the canonical link and the link-preview tags).
-  VITE_SITE_URL: https://tinylittleoffice.com/
+  VITE_SITE_URL: https://office.monkeydo.biz/
+  # This fork: the address the Invoicer's mail drafts link an invoice at, which redirects to the site with the link's
+  # document intact (src/plus/README.md, "Deploying").
+  VITE_PLUS_INVOICE_SITE: https://invoice.monkeydo.biz/
 
 jobs:
+  # This fork (src/plus/README.md, "Deploying"): each Worker's BRAKE_KEY, which docs/self-host.md has a person set once by
+  # hand, is made here on the first deploy, a long random string nobody sees; a key already set is left as it is. The
+  # deploy's own check (scripts/deploy.mjs) then finds both.
+  keys:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Each Worker's BRAKE_KEY, made when it has none
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          for config in tinier/wrangler.jsonc wrangler.jsonc; do
+            if npx wrangler secret list -c "$config" --format json 2>/dev/null | grep -q '"BRAKE_KEY"'; then
+              echo "$config: its Worker has its BRAKE_KEY"
+            else
+              openssl rand -base64 32 | tr -d '\n' | npx wrangler secret put BRAKE_KEY -c "$config"
+            fi
+          done
+
   deploy:
+    needs: keys
     runs-on: ubuntu-latest
     timeout-minutes: 90
     environment: production
@@ -78,7 +113,7 @@ jobs:
       - name: The live site is the build, file by file
         # A minute for the new files to reach every edge, then once more if any still differ.
         run: |
-          npm run verify-deploy -- https://tinylittleoffice.com/ || { sleep 60; npm run verify-deploy -- https://tinylittleoffice.com/; }
+          npm run verify-deploy -- https://office.monkeydo.biz/ || { sleep 60; npm run verify-deploy -- https://office.monkeydo.biz/; }
 
   release:
     needs: deploy
@@ -108,7 +143,7 @@ jobs:
       - name: The offline list, the worker and the policy
         run: node scripts/check-build.ts
       - name: This build is what the site serves
-        run: npm run verify-deploy -- https://tinylittleoffice.com/
+        run: npm run verify-deploy -- https://office.monkeydo.biz/
       - name: The archive (sorted, no times, no owners, so it is the same bytes too)
         run: tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -C dist -cf - . | gzip -n > "$ARCHIVE"
       - name: Attest the build

@@ -9,8 +9,7 @@ import { SITE, handle } from './tinier.ts';
 
 declare global {
   interface Env {
-    /** Set only under `wrangler dev` (npm run tinier:dev), for a copy of the site on this machine. */
-    SITE?: string;
+    // SITE: this fork sets it in tinier/wrangler.jsonc's vars, so `wrangler types` declares it (src/plus/README.md, "Deploying").
     /**
      * The secret the daily counts are kept under: `wrangler secret put BRAKE_KEY` in production, tinier/.dev.vars on
      * this machine (where `wrangler types` reads it as a string too). Never in the repo; brakeKey() refuses without it.

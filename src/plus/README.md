@@ -5,14 +5,15 @@ added. Those apps live here, in `src/plus/`, so that upstream's changes can keep
 
 ## What touches upstream
 
-**One line.** `src/main.ts` imports `./plus/index.ts` before the shell:
+**One line for the apps.** `src/main.ts` imports `./plus/index.ts` before the shell:
 
 ```ts
 // This fork's own apps, put in the registry before the shell reads it (src/plus/README.md).
 import './plus/index.ts';
 ```
 
-Nothing else of upstream's is edited: not the registry, the language files, the stylesheet, the budgets, the tests or
+Nothing else of upstream's is edited for the apps (deploying to this fork's own address is the exception: see
+[Deploying](#deploying)): not the registry, the language files, the stylesheet, the budgets, the tests or
 the generated guides. Everything else is a new file under `src/plus/`, which upstream never writes to.
 
 ## How it works
@@ -50,6 +51,29 @@ npm ci && npm run lint && npm test
 A conflict can only come from `src/main.ts`'s import block, and resolving it means keeping the `./plus/index.ts`
 import above `./kit/core/shell.ts`. If `src/plus/tests/plus.unit.test.ts` fails after a merge, upstream changed how
 `apps()` hands out its list, and `src/plus/index.ts` is the one file to adjust.
+
+## Deploying
+
+This fork runs at **https://office.monkeydo.biz**, with short links at **tinier.monkeydo.biz**. The Invoicer's mail
+drafts link invoices at **invoice.monkeydo.biz**, which redirects to `office.` (a Cloudflare Redirect Rule). A browser
+keeps the `#…` part of a link through a redirect, so the invoice arrives whole.
+
+A deploy is upstream's: push a tag `v*`, and `.github/workflows/deploy.yml` runs every check, then ships both Workers
+(docs/self-host.md). The repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` must be set.
+
+Deploying anywhere but tinylittleoffice.com means changing upstream's settings, and upstream's tests pin them. These
+are the lines this fork changes. On an upstream merge, keep ours:
+
+| File | What this fork has |
+| --- | --- |
+| `wrangler.jsonc` | `routes`: `office.monkeydo.biz`; `database_id`: this account's D1 database `tinier` |
+| `tinier/wrangler.jsonc` | `routes`: `tinier.monkeydo.biz`; `vars.SITE`: `https://office.monkeydo.biz`; the same `database_id` |
+| `tinier/worker.ts` | no `SITE?: string` in `Env`: the var above declares it, through `wrangler types` |
+| `src/kit/core/network.ts` | the `tinier` host: `tinier.monkeydo.biz` (it writes the policy's `connect-src`) |
+| `docs/network.md`, `public/network.html` | regenerated from it (`npm run docs:network`) |
+| `.github/workflows/deploy.yml` | `VITE_SITE_URL`, `VITE_PLUS_INVOICE_SITE` and the `verify-deploy` address; a `keys` job that makes each Worker's `BRAKE_KEY` on the first deploy |
+| `packages/doc/package.json` | `"private": true`: this fork publishes nothing to npm, so no `NPM_TOKEN` is needed |
+| `test/csp.test.ts`, `test/deploy.test.ts`, `test/package.test.ts`, `test/repository.test.ts` | the same, as the tests expect it |
 
 ## Adding another plus app
 

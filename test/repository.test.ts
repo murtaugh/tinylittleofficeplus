@@ -40,7 +40,8 @@ test('no old name and no path of this machine anywhere in the tree (docs/history
 test('the packages say what they are and where they live: the site stays unpublished, the command line is the npm package', () => {
   for (const path of ['package.json', 'packages/doc/package.json']) {
     const p = JSON.parse(read(path));
-    expect(p.private, path).toBe(path === 'package.json' ? true : undefined);
+    // This fork publishes neither (src/plus/README.md, "Deploying"); upstream's command line is public.
+    expect(p.private, path).toBe(true);
     expect(p.license, path).toBe('MIT');
     expect(p.homepage, path).toBe('https://tinylittleoffice.com');
     expect(p.repository, path).toEqual({ type: 'git', url: URL, ...(path === 'package.json' ? {} : { directory: 'packages/doc' }) });
