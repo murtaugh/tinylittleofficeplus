@@ -34,9 +34,6 @@ env:
   TAG: ${{ inputs.tag || github.ref_name }}
   # The address the site is published at (the canonical link and the link-preview tags).
   VITE_SITE_URL: https://office.monkeydo.biz/
-  # This fork: the address the Invoicer's mail drafts link an invoice at, which redirects to the site with the link's
-  # document intact (src/plus/README.md, "Deploying").
-  VITE_PLUS_INVOICE_SITE: https://invoice.monkeydo.biz/
 
 jobs:
   # This fork (src/plus/README.md, "Deploying"): each Worker's BRAKE_KEY, which docs/self-host.md has a person set once by
