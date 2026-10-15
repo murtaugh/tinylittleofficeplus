@@ -7,6 +7,8 @@ import './styles.css';
 import { initLanguage } from './kit/core/i18n.ts';
 import { initTheme } from './kit/ui/theme.ts';
 import { offlineAtLoad } from './kit/share/offline.ts';
+// This fork's own apps, put in the registry before the shell reads it (src/plus/README.md).
+import './plus/index.ts';
 import './kit/core/shell.ts';
 
 initTheme();
