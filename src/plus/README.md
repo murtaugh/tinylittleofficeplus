@@ -74,8 +74,9 @@ are the lines this fork changes. On an upstream merge, keep ours:
 | `src/kit/core/network.ts` | the `tinier` host: `tinier.monkeydo.biz` (it writes the policy's `connect-src`) |
 | `docs/network.md`, `public/network.html` | regenerated from it (`npm run docs:network`) |
 | `.github/workflows/deploy.yml` | `VITE_SITE_URL` and the `verify-deploy` address; a `keys` job that makes each Worker's `BRAKE_KEY` on the first deploy |
+| `scripts/verify-deploy.ts` | leaves `robots.txt` out of the live-site check: Cloudflare's managed robots.txt rewrites it at the edge |
 | `packages/doc/package.json` | `"private": true`: this fork publishes nothing to npm, so no `NPM_TOKEN` is needed |
-| `test/csp.test.ts`, `test/deploy.test.ts`, `test/package.test.ts`, `test/repository.test.ts`, `test/browser/short.test.ts` | the same, as the tests expect it |
+| `test/csp.test.ts`, `test/deploy.test.ts`, `test/package.test.ts`, `test/repository.test.ts`, `test/browser/short.test.ts`, `test/verify-deploy.test.ts` | the same, as the tests expect it |
 
 ## Adding another plus app
 

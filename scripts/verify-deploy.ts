@@ -29,8 +29,12 @@ export interface Row {
   status: string;
 }
 
-/** The paths the site serves, from a build's hashes: everything but the host's own _headers. A page is asked for by its folder. */
-export const served = (built: Map<string, string>) => [...built.keys()].filter((p) => p !== '_headers');
+/**
+ * The paths the site serves, from a build's hashes: everything but the host's own _headers. A page is asked for by its
+ * folder. This fork leaves out robots.txt too: Cloudflare's managed robots.txt, kept on for monkeydo.biz, writes its own
+ * rules into it at the edge (src/plus/README.md, "Deploying").
+ */
+export const served = (built: Map<string, string>) => [...built.keys()].filter((p) => p !== '_headers' && p !== 'robots.txt');
 export const addressOf = (site: string, path: string) => new URL(path.replace(/(^|\/)index\.html$/, '$1'), site).href;
 
 /** The rows as a table: the path, the build's hash and the site's (twelve characters each), and the verdict. */
