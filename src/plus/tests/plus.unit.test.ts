@@ -3,9 +3,11 @@ import { describe, expect, test } from 'vitest';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { apps, appOf } from '../../kit/core/apps.ts';
-import { addPlusApps, PLUS_APPS } from '../index.ts';
+import { addPlusApps } from '../index.ts';
+import { PLUS_APPS } from '../apps.ts';
 import { DICTS } from '../invoice/words.ts';
 import { gaps } from '../i18n.ts';
+import { withPlusApps } from '../build.ts';
 
 const PLUS = new URL('../', import.meta.url).pathname;
 
@@ -52,4 +54,14 @@ describe('the words', () => {
       const names = (s: string) => [...s.matchAll(/\{(\w+)/g)].map((m) => m[1]).sort();
       for (const k of keys) expect(names(dict[k]), k).toEqual(names(k));
     });
+});
+
+describe('the build', () => {
+  test('the first paint’s list of apps gets the plus apps after upstream’s, and a page without one is left as it was', () => {
+    const page = '<body><header id="to-first"><h1>Tiny Little Office</h1><ul><li><a href="write/">Word Processor</a></li></ul></header><main><ul></ul></main></body>';
+    expect(withPlusApps(page, [{ id: 'invoice', name: 'Invoicer & co' }])).toBe(
+      '<body><header id="to-first"><h1>Tiny Little Office</h1><ul><li><a href="write/">Word Processor</a></li><li><a href="#/v1/invoice">Invoicer &amp; co</a></li></ul></header><main><ul></ul></main></body>',
+    );
+    expect(withPlusApps('<body></body>', PLUS_APPS)).toBe('<body></body>');
+  });
 });
