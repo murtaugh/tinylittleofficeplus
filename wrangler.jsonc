@@ -27,7 +27,7 @@
     {
       "binding": "DB",
       "database_name": "tinier",
-      "database_id": "6ede155f-083c-4ab9-a33e-64eea0704bb5",
+      "database_id": "8b98fe00-5505-426c-a59c-769d7975eea8",
       "migrations_dir": "tinier/migrations",
     },
   ],
