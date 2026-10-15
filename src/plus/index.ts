@@ -10,10 +10,7 @@
  */
 import { apps } from '../kit/core/apps.ts';
 import type { AppDef } from '../kit/core/app.ts';
-import invoice from './invoice/def.ts';
-
-/** The plus apps, in the order the home page lists them, after upstream's. */
-export const PLUS_APPS: AppDef[] = [invoice];
+import { PLUS_APPS } from './apps.ts';
 
 /** Put the plus apps in the site's registry, once. */
 export function addPlusApps(list: AppDef[] = apps()): AppDef[] {

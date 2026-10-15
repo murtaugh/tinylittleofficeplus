@@ -55,7 +55,7 @@ test('a short link made here: the lifetime from the row, the link big with Copy 
   expect(JSON.stringify(sent[0].body)).not.toContain('Hello');
   const field = section(shell).querySelector<HTMLInputElement>('.to-short-field')!;
   expect(field.readOnly).toBe(true);
-  expect(field.value).toMatch(/^https:\/\/tinier\.tinylittleoffice\.com\/qrstuvw#[A-Za-z0-9_~]{43}$/);
+  expect(field.value).toMatch(/^https:\/\/tinier\.monkeydo\.biz\/qrstuvw#[A-Za-z0-9_~]{43}$/);
   // The key in the link opens what was sent: the document's link.
   expect(await unshorten(sent[0].body.c as string, sent[0].body.iv as string, field.value.split('#')[1])).toBe(shell.link);
   expect(section(shell).querySelector('.to-short-expires')!.textContent).toMatch(/^Expires in 30 days \(/);

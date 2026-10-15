@@ -16,6 +16,10 @@ Nothing else of upstream's is edited for the apps (deploying to this fork's own 
 [Deploying](#deploying)): not the registry, the language files, the stylesheet, the budgets, the tests or
 the generated guides. Everything else is a new file under `src/plus/`, which upstream never writes to.
 
+**One line for the build.** `vite.config.ts` adds `plusBuild()` (`src/plus/build.ts`) after upstream's own plugins.
+It puts the plus apps in the static home page that shows before the app loads, so nothing moves when the app draws the
+same list (`e2e/smoke.spec.ts` checks this).
+
 ## How it works
 
 - **The registry.** Upstream's `apps()` (`src/kit/core/apps.ts`) returns its own list, and `appOf()`, the home page,
@@ -71,7 +75,7 @@ are the lines this fork changes. On an upstream merge, keep ours:
 | `docs/network.md`, `public/network.html` | regenerated from it (`npm run docs:network`) |
 | `.github/workflows/deploy.yml` | `VITE_SITE_URL` and the `verify-deploy` address; a `keys` job that makes each Worker's `BRAKE_KEY` on the first deploy |
 | `packages/doc/package.json` | `"private": true`: this fork publishes nothing to npm, so no `NPM_TOKEN` is needed |
-| `test/csp.test.ts`, `test/deploy.test.ts`, `test/package.test.ts`, `test/repository.test.ts` | the same, as the tests expect it |
+| `test/csp.test.ts`, `test/deploy.test.ts`, `test/package.test.ts`, `test/repository.test.ts`, `test/browser/short.test.ts` | the same, as the tests expect it |
 
 ## Adding another plus app
 

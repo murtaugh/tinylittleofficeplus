@@ -7,6 +7,8 @@ import { listed, writePages } from './scripts/seo.ts';
 import { writeWorker } from './scripts/sw-manifest.ts';
 import { gitFacts, versionJson, versionOf } from './scripts/version.ts';
 import type { AppDef } from './src/kit/core/app.ts';
+// This fork's apps in the built home page (src/plus/README.md).
+import { plusBuild } from './src/plus/build.ts';
 
 /**
  * The registry and the page scripts, read from the source under node at the end of the build (the
@@ -133,7 +135,7 @@ export default defineConfig(({ mode }) => ({
       '/card': { target: 'http://127.0.0.1:8789' },
     },
   },
-  plugins: [afterBuild(loadEnv(mode, import.meta.dirname).VITE_SITE_URL ?? ''), previewCache()],
+  plugins: [afterBuild(loadEnv(mode, import.meta.dirname).VITE_SITE_URL ?? ''), previewCache(), plusBuild(import.meta.dirname)],
   build: {
     target: 'es2022',
     outDir: 'dist',
