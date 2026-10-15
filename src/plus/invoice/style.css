@@ -1,0 +1,377 @@
+/* Invoicer: the invoice as a sheet of paper whose parts are fields, at any width; the business and the invoice's days
+   side by side where there is room, one under the other on a phone. Paper stays white in both themes (the kit's
+   --to-paper tokens), so what is typed is seen as it prints. Lengths in rem, as upstream's sheets keep them
+   (test/stylesheets.test.ts); every box is 16px or more, so a phone never zooms on it. */
+@layer apps {
+  plus-invoice-editor {
+    display: block;
+  }
+  .inv {
+    max-width: 54rem;
+    margin-inline: auto;
+    padding-block: 1rem 4rem;
+  }
+  .inv-paper {
+    background: var(--to-paper);
+    color: var(--to-paper-ink);
+    border: 1px solid var(--to-paper-line);
+    border-radius: var(--to-radius);
+    box-shadow: var(--to-shadow);
+    padding: clamp(1rem, 4vw, 3rem);
+    display: grid;
+    gap: 1.25rem;
+  }
+  .inv-paper input,
+  .inv-paper textarea,
+  .inv-paper select {
+    font: inherit;
+    font-size: max(1rem, 16px);
+    color: var(--to-paper-ink);
+    background: var(--to-paper-shade);
+    border: 1px solid var(--to-paper-line);
+    border-radius: var(--to-radius-sm);
+    padding: 0.375rem 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .inv-paper input:focus-visible,
+  .inv-paper textarea:focus-visible,
+  .inv-paper select:focus-visible {
+    outline: 2px solid var(--to-paper-accent);
+    outline-offset: 1px;
+    background: var(--to-paper);
+  }
+  .inv-paper textarea {
+    resize: vertical;
+    field-sizing: content;
+    min-height: 2.5rem;
+  }
+  .inv-head {
+    display: grid;
+    grid-template-columns: 1fr minmax(14rem, auto);
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--to-paper-ink);
+  }
+  .inv-from {
+    font-weight: 600;
+  }
+  .inv-meta {
+    display: grid;
+    gap: 0.375rem;
+    align-content: start;
+  }
+  .inv-meta label,
+  .inv-settings label {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .inv-meta label > span,
+  .inv-settings label > span,
+  .inv-title > span,
+  .inv-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--to-paper-muted);
+  }
+  .inv-meta label > span,
+  .inv-settings label > span {
+    text-align: end;
+  }
+  .inv-word {
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-align: end;
+  }
+  .inv-title {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .inv-title input {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .inv-to-block {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 28rem;
+  }
+  .inv-to-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .inv-to-bar select {
+    width: auto;
+    flex: 1;
+  }
+  .inv-to {
+    font-weight: 600;
+  }
+  .inv-lines {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  /* The words take what the numbers leave. */
+  .inv-lines th:nth-child(2) {
+    width: 7rem;
+  }
+  .inv-lines th:nth-child(3),
+  .inv-lines th:nth-child(4) {
+    width: 6rem;
+  }
+  .inv-lines th:nth-child(5) {
+    width: 7rem;
+  }
+  .inv-lines th:nth-child(6) {
+    width: 3rem;
+  }
+  .inv-lines th {
+    text-align: start;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--to-paper-muted);
+    padding: 0 0.25rem 0.5rem;
+    border-bottom: 1px solid var(--to-paper-ink);
+  }
+  .inv-lines td {
+    padding: 0.375rem 0.25rem;
+    border-bottom: 1px solid var(--to-paper-line);
+    vertical-align: top;
+  }
+  .inv-lines th.inv-num,
+  .inv-lines td.inv-num {
+    text-align: end;
+  }
+  .inv-lines td.inv-num input {
+    text-align: end;
+  }
+  .inv-amount {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.75rem;
+  }
+  .inv-add {
+    justify-self: start;
+  }
+  .inv-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .inv-settings {
+    display: grid;
+    gap: 0.375rem;
+  }
+  .inv-settings input {
+    width: 6rem;
+  }
+  .inv-sums {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.375rem 1.5rem;
+    margin: 0;
+    min-width: 16rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .inv-sums dt {
+    color: var(--to-paper-muted);
+    text-align: end;
+  }
+  .inv-sums dd {
+    margin: 0;
+    text-align: end;
+  }
+  .inv-sums .inv-total {
+    border-top: 2px solid var(--to-paper-ink);
+    padding-top: 0.5rem;
+    font-weight: 700;
+    color: var(--to-paper-ink);
+  }
+  .inv-sums dd.inv-total {
+    font-size: 1.375rem;
+  }
+  .inv-notes {
+    display: grid;
+    gap: 0.25rem;
+    border-top: 1px solid var(--to-paper-line);
+    padding-top: 1rem;
+  }
+  .inv-status {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--to-radius-pill);
+    background: var(--to-surface-2);
+    color: var(--to-ink);
+  }
+  .inv-status.inv-paid {
+    background: var(--to-ok-bg);
+    color: var(--to-ok-ink);
+  }
+  .inv-status.inv-overdue {
+    background: var(--to-last-bg);
+    color: var(--to-last-ink);
+  }
+  .inv-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* The dialogs: the business's details and the ledger. */
+  .inv-form {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .inv-label {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .inv-label > span {
+    font-weight: 600;
+  }
+  .inv-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .inv-note {
+    margin: 0;
+    color: var(--to-ink-3);
+  }
+  .inv-sub {
+    margin: 0.75rem 0 0;
+    font-size: 1rem;
+  }
+  .inv-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .inv-clients {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.375rem;
+  }
+  .inv-clients li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .inv-clients small {
+    color: var(--to-ink-3);
+  }
+  .inv-file input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .inv-file:focus-within {
+    outline: 2px solid var(--to-accent);
+  }
+  .inv-owed {
+    margin: 0 0 0.75rem;
+    display: grid;
+    gap: 0.25rem;
+  }
+  .inv-ledger {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  .inv-ledger th,
+  .inv-ledger td {
+    text-align: start;
+    padding: 0.375rem 0.5rem;
+    border-bottom: 1px solid var(--to-border);
+  }
+  .inv-ledger .inv-num {
+    text-align: end;
+  }
+  /* A phone: one column; a line's fields wrap under its words. */
+  @media (max-width: 640px) {
+    .inv-head {
+      grid-template-columns: 1fr;
+    }
+    .inv-word {
+      text-align: start;
+    }
+    .inv-meta label > span,
+    .inv-settings label > span {
+      text-align: start;
+    }
+    .inv-paper {
+      padding: 1rem 0.75rem;
+    }
+    .inv-lines,
+    .inv-lines tbody {
+      display: block;
+    }
+    .inv-lines thead {
+      display: none;
+    }
+    .inv-lines tr {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+      gap: 0.375rem;
+      padding-block: 0.5rem;
+      border-bottom: 1px solid var(--to-paper-line);
+    }
+    .inv-lines td {
+      border: 0;
+      padding: 0;
+    }
+    .inv-lines td {
+      min-width: 0;
+    }
+    /* The words across the row, the unit, quantity and rate under them, then the amount and the way to take it away. */
+    .inv-lines td:first-child {
+      grid-column: 1 / -1;
+    }
+    .inv-lines td.inv-amount {
+      grid-column: 1 / 4;
+      text-align: start;
+      align-self: center;
+      padding-top: 0;
+      font-weight: 600;
+    }
+    .inv-lines td:last-child {
+      grid-column: 4;
+      grid-row: 2 / 4;
+      align-self: center;
+    }
+    .inv-meta label,
+    .inv-settings label {
+      grid-template-columns: 5.5rem minmax(0, 1fr);
+    }
+    .inv-sums {
+      min-width: 0;
+      width: 100%;
+    }
+    .inv-pair {
+      grid-template-columns: 1fr;
+    }
+  }
+}
