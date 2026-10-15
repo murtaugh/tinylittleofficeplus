@@ -32,7 +32,9 @@ test('every file but _headers is asked for, a page by its folder, under the site
     ['index.html', 'x'],
     ['text/index.html', 'x'],
     ['assets/a.js', 'x'],
+    ['robots.txt', 'x'],
   ]);
+  // This fork: Cloudflare rewrites robots.txt at the edge, so it is not compared (src/plus/README.md, "Deploying").
   expect(served(built)).toEqual(['index.html', 'text/index.html', 'assets/a.js']);
   expect(addressOf('https://example.com/', 'index.html')).toBe('https://example.com/');
   expect(addressOf('https://example.com/', 'text/index.html')).toBe('https://example.com/text/');
