@@ -1,5 +1,6 @@
 {
   "name": "tinylittleoffice",
+  "private": true,
   "version": "1.2.0-next",
   "description": "Tiny Little Office from the command line and in Node: links from files, files from links, and the lint, the measures and the examples an agent checks a document by.",
   "keywords": [

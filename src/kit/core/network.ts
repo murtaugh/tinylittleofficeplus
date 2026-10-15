@@ -100,7 +100,7 @@ export const NETWORK = {
     by: 'apps/trip/editor.ts, apps/trip/view.ts',
   },
   tinier: {
-    host: 'tinier.tinylittleoffice.com',
+    host: 'tinier.monkeydo.biz',
     what: 'Short links: made or opened',
     when: 'after a tap',
     carries: 'The long link encrypted here, which the service cannot read, and how long to keep it',

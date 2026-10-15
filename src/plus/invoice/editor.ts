@@ -43,6 +43,11 @@ export const tag = 'plus-invoice-editor';
 
 /** The longest link a mail draft carries; past it the draft says the PDF is attached instead. */
 const MAIL_LINK_MAX = 1800;
+/**
+ * The address a mail draft links an invoice at: the build's VITE_PLUS_INVOICE_SITE where it names one (a name of the
+ * business's own that redirects to the site, the document after the "#" carried through), else the page's own.
+ */
+const INVOICE_SITE = (import.meta.env?.VITE_PLUS_INVOICE_SITE as string | undefined) || '';
 
 const statusWords = (s: Status): string => ({ paid: pt('Paid'), overdue: pt('Overdue'), open: pt('Open'), draft: pt('Draft') })[s];
 
@@ -108,7 +113,7 @@ export class PlusInvoiceEditor extends DocElement<Invoice> {
   email() {
     const v = this.view;
     const total = formatMoney(totals(v).total, v.currency || '$');
-    const link = new URL(location.href);
+    const link = new URL(INVOICE_SITE || location.href);
     link.hash = routeHash(ID, encodeDoc(write(this.doc)), '', true);
     const subject = v.title.trim() || pt('Invoice {number}', { number: v.number });
     const due = v.due ? pt('due {day}', { day: dayText(v.due) }) : pt('due on receipt');
